@@ -1,5 +1,6 @@
 "use client";
 
+import { ColdStartLoadingScreen } from "@/components/ColdStartLoadingScreen";
 import { TrendsCharts } from "@/components/TrendsCharts";
 import { useInsightsData } from "@/components/InsightsDataProvider";
 import { EmptyState, PageHeader } from "@/components/ui";
@@ -9,12 +10,7 @@ export function TrendsView() {
   const { trends, trendsLoading, dataGeneration } = useInsightsData();
 
   if (trendsLoading && !trends) {
-    return (
-      <div className="p-4 md:p-10 max-w-[1600px] mx-auto w-full space-y-4">
-        <div className="h-10 w-48 skeleton rounded-lg" />
-        <div className="h-80 skeleton rounded-xl" />
-      </div>
-    );
+    return <ColdStartLoadingScreen variant="trends" />;
   }
 
   if (!trends || trends.periods.length === 0) {

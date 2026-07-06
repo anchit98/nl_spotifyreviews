@@ -263,7 +263,7 @@ export function QuestionDetailView({
           </div>
         </GlassCard>
 
-        <GlassCard className="p-6 h-64 flex flex-col min-w-0 overflow-hidden">
+        <GlassCard className="p-6 min-h-[320px] flex flex-col min-w-0 overflow-hidden">
           <SourceMixDonut
             bySource={answer.stats.by_source ?? {}}
             total={answer.stats.total_mentions}

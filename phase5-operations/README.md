@@ -25,7 +25,7 @@ SUPABASE_PROJECT_URL=...
 SUPABASE_PROJECT_ANON_KEY=...
 ALERT_WEBHOOK_URL=https://hooks.slack.com/...   # optional
 GROQ_MODEL=llama-3.3-70b-versatile
-PROMPT_VERSION=2026-06-v1
+PROMPT_VERSION=2026-07-v1
 ```
 
 4. **Install:**

@@ -14,6 +14,15 @@ Writes to the `insights` schema in Supabase:
 
 Phase 2 already tags each row with `topics_matched`. Phase 3 maps those topics to the six questions, counts mentions by source/rating, selects up to 30 representative quotes per question, and sends that bundle to Groq.
 
+## Primary research agenda
+
+All Groq prompts share a `RESEARCH_AGENDA` constant in `src/phase3_insights/prompts.py` (pinned as **`PROMPT_VERSION=2026-07-v1`** in Phase 5). Synthesis must centre every narrative and the executive summary on:
+
+1. **Why users struggle with meaningful music discovery**
+2. **Why a significant share of listening still comes from repeat playlists, familiar artists, and previously discovered tracks**
+
+Indirect signals (recommendation frustration, UI friction, habit loops, catalog fatigue, segment differences) are included when they plausibly explain discovery failure or repetitive fallback. Re-run synthesis after prompt changes to refresh stored narratives.
+
 ## Edge cases handled
 
 - **3.1** — Groq rate limits with backoff; stops cleanly when daily quota is exhausted
@@ -62,3 +71,5 @@ python -m phase3_insights.synthesizer            # full run (6 questions + execu
 | `GROQ_MODEL` | `llama-3.3-70b-versatile` | Model slug |
 | `SKIP_EXECUTIVE_SUMMARY` | `false` | Skip the 7th Groq call |
 | `GROQ_RATE_LIMIT_SAFETY_MARGIN` | `0.05` | Buffer below daily quota |
+
+Prompt definitions live in `src/phase3_insights/prompts.py`. Bump `PROMPT_VERSION` in Phase 5 (`config/model_pin.yaml`) when prompts change materially.

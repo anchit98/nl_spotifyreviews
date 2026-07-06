@@ -6,12 +6,12 @@ import { ApiError, sendPmBuddyMessage } from "@/lib/api";
 import type { PmBuddyChatTurn } from "@/lib/types";
 
 const STARTER_PROMPTS = [
-  "Why do users struggle to discover new music?",
-  "What are the most common frustrations with recommendations?",
-  "What listening behaviors are users trying to achieve?",
-  "What causes users to repeatedly listen to the same content?",
-  "Which user segments experience different discovery challenges?",
-  "What unmet needs emerge consistently across reviews?",
+  "Why do users struggle to discover meaningful new music?",
+  "Why do so many users keep listening to repeat playlists and familiar artists?",
+  "What recommendation frustrations push users back to previously discovered tracks?",
+  "What habits or product patterns cause repetitive listening instead of discovery?",
+  "Which user segments hit discovery barriers differently — and why?",
+  "What unmet needs explain why discovery fails and familiar content wins?",
 ];
 
 function MessageBubble({ turn }: { turn: PmBuddyChatTurn }) {
@@ -97,7 +97,7 @@ export function PmBuddyChat() {
                 Ask PM Buddy anything about discovery &amp; repetition
               </h2>
               <p className="text-[14px] text-text-muted max-w-lg mx-auto">
-                I synthesize answers from public reviews plus latest Groq insights, solely focused on music discovery & repetitive listening behavior.
+                Grounded in public reviews and latest synthesis — focused on why meaningful discovery is hard and why listening still clusters around repeat playlists, familiar artists, and previously discovered tracks.
               </p>
             </div>
             <div className="flex flex-wrap gap-2 justify-center">
@@ -139,7 +139,7 @@ export function PmBuddyChat() {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask about repetitive listening, segments, or discovery barriers…"
+          placeholder="Ask about repetitive listening or discovery barriers…"
           disabled={loading}
           className="flex-1 bg-surface-low border border-border-subtle rounded-full px-5 py-3 text-[15px] text-on-surface placeholder:text-text-muted focus:outline-none focus:border-primary/50"
         />

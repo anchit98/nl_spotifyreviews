@@ -171,10 +171,10 @@ Run through this once after first deploy:
 
 - [ ] `GET /health` → `ok`
 - [ ] `GET /api/insights/latest` → 200 with `question_answers` (6 items)
-- [ ] Home page — executive summary, pain points, question cards
-- [ ] `/trends` — chart loads; x-axis starts Jan 2026
-- [ ] `/questions/q1` — themes and quotes
-- [ ] `/pm-buddy` — send a test message (needs `GROQ_API_KEY`)
+- [ ] Home page — research-agenda executive summary, pain points, source mix (donut above legend), question cards
+- [ ] `/trends` — chart loads; x-axis starts Jan 2026; cold-start loading screen on first visit if backend was idle
+- [ ] `/questions/q1` — themes, source donut (vertical layout), and quotes
+- [ ] `/pm-buddy` — send a test message (needs `GROQ_API_KEY`); default answer should be concise without segment/hypothesis sections unless asked
 - [ ] **Export Report** — PDF downloads
 - [ ] GitHub Actions **weekly** workflow — green run (or `probe` for a quick check)
 - [ ] **Synthesize now** — starts, shows progress on `/synthesis` (optional; consumes Groq quota)
@@ -213,7 +213,8 @@ Never point production Vercel at a staging Render URL (or vice versa).
 | CORS error in browser console | `CORS_ORIGINS` missing Vercel URL | Add production URL on Render; keep `CORS_ORIGIN_REGEX` for previews |
 | `/api/insights/latest` 404 | No successful synthesis yet | Run GitHub Actions pipeline or local Phase 3 |
 | PM Buddy 503 | `GROQ_API_KEY` missing on Render | Add key in Render env; restart service |
-| Slow first load | Render cold start | Normal on Starter; show loading state |
+| Slow first load | Render cold start | Normal on Starter; `ColdStartLoadingScreen` on Home/Trends; allow 30–60s |
+| Stale executive summary / narratives | Prompt updated but synthesis not re-run | Run **Synthesize now** after `prompts.py` changes (`PROMPT_VERSION=2026-07-v1`) |
 | Synthesis stuck / no executive summary | Groq daily token cap | Wait 24h or avoid multiple syntheses per day |
 | Trends show old date range | Stale API cache or old Render deploy | `POST /api/cache/invalidate` or redeploy backend |
 
@@ -239,5 +240,5 @@ Once live, move to Phase 5 ([architecture.md](architecture.md)):
 
 - Failure alerts on red GitHub Actions runs
 - Per-run health metrics (volume per source)
-- Pin Groq model version per synthesis run
+- Pin Groq model version per synthesis run (`PROMPT_VERSION=2026-07-v1` in `phase5-operations/config/model_pin.yaml`)
 - Weekly product review using the dashboard + PDF export

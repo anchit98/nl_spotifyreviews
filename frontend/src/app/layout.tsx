@@ -13,6 +13,13 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Music Discovery Insights",
   description: "Evidence from public user feedback across app stores, Reddit, forums, and social media.",
+  icons: {
+    icon: [
+      { url: "/favicon-32.webp", type: "image/webp", sizes: "32x32" },
+      { url: "/app-logo.webp", type: "image/webp", sizes: "80x80" },
+    ],
+    apple: [{ url: "/apple-touch-icon.webp", type: "image/webp", sizes: "180x180" }],
+  },
 };
 
 export default function RootLayout({

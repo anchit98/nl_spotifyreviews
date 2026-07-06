@@ -185,6 +185,8 @@ The six questions answered:
 
 We **prioritise** pain points by frequency, low star ratings, and spread across sources. Every narrative is anchored to real counts and verbatim quotes — the model does not see the full 23k-row corpus, only summaries.
 
+**Primary research agenda (all Groq outputs):** Every synthesis narrative and the executive summary are steered by a shared `RESEARCH_AGENDA` in `phase3_insights/prompts.py` (prompt version **`2026-07-v1`**). The model must centre answers on **why users struggle with meaningful music discovery** and **why a significant share of listening still comes from repeat playlists, familiar artists, and previously discovered tracks** — including indirect signals (recommendation frustration, UI friction, habit loops, catalog fatigue) when they plausibly explain discovery failure or repetitive fallback. Other themes are welcome when they clearly connect back to these core questions.
+
 **Where this runs:** the same **GitHub Actions weekly workflow** as Phases 1–2. Aggregation is free (no Groq). Synthesis uses ~30–50k Groq tokens per full run — well within the free-tier daily cap (`100k` tokens/day for `llama-3.3-70b-versatile`).
 
 **Inputs:** The `clean` schema from Phase 2 (`topics_matched`, `cleaned_text`, `source`, `rating`).
@@ -217,17 +219,18 @@ The frontend reads from the **FastAPI backend** on Render. Synthesis answers com
 
 | Route | Purpose |
 |---|---|
-| `/` | Executive overview — live KPIs (`dataset_stats`), executive summary, top pain points and opportunities, source-mix donut, six question preview cards |
-| `/pm-buddy` | **PM Buddy** — Groq chat copilot grounded in dataset stats, repetitive-listening signals, segment breakdown, and synthesis evidence |
+| `/` | Executive overview — live KPIs (`dataset_stats`), research-agenda executive summary, top pain points and opportunities, source-mix donut (large chart above legend), six question preview cards |
+| `/pm-buddy` | **PM Buddy** — Groq chat copilot grounded in dataset stats, repetitive-listening signals, and synthesis evidence; concise answers by default (segments/hypotheses only on request) |
 | `/questions/q1` … `/questions/q6` | One page per research question — ranked themes, narrative, source donut, rating chart, filterable quote gallery |
 | `/trends` | Live review trends — dual-axis chart (net sentiment + average rating) with Weekly / Monthly / Yearly granularity |
 | `/runs` | Synthesis run history |
 | `/synthesis` | In-progress synthesis status |
 
 **Navigation and performance:**
-- A fixed **sidebar** links Home, PM Buddy, Trends, History, and Q1–Q6; routes are prefetched for fast tab switching.
+- A fixed **sidebar** links Home, PM Buddy, Trends, History, and Q1–Q6; routes are prefetched for fast tab switching. Branding uses the Spotify logo (`/app-logo.webp`) and product title **Spotify Review Analysis Engine**.
 - **`InsightsDataProvider`** caches the insights bundle and trends (~60 seconds) at the app root so revisiting pages feels instant.
 - **`QuestionsBundleProvider`** shares the bundle across question pages without refetching on every navigation.
+- **`ColdStartLoadingScreen`** on Home and Trends shows synthesis-style progress while the Render backend wakes from idle (Starter tier cold starts can take 30–60s).
 
 **Home header actions (not in the sidebar):**
 - **Export Report** — generates a multi-page PDF snapshot of home, all six questions, and trends.
@@ -235,7 +238,7 @@ The frontend reads from the **FastAPI backend** on Render. Synthesis answers com
 
 **Question page behaviour:**
 - Source filter chips sit **above** the quote gallery and sync with charts.
-- Mentions-by-source is shown as a **donut chart** (consistent with the home source mix).
+- Mentions-by-source is shown as a **donut chart** via shared `SourceMixDonut` — large pie centred above a full-width legend (same vertical layout as home source mix).
 - Representative quotes are balanced across sources and prefer lower star ratings when refreshed on API read.
 - No per-page Synthesize button and no audit footer.
 
@@ -243,7 +246,7 @@ The frontend reads from the **FastAPI backend** on Render. Synthesis answers com
 Trends are computed from **`clean.feedback_items`** by posting date, not by comparing theme counts across synthesis runs. Each period reports review volume, average star rating, and a **net sentiment score** derived from ratings (4–5★ positive, 3★ neutral, 1–2★ negative; net % = `(positive − negative) / rated_count × 100`). This is a rating proxy, not Groq text sentiment.
 
 **PM Buddy:**
-`POST /api/pm-buddy/chat` builds a structured evidence context (dataset scale, repetitive-listening keywords, segment hints, latest synthesis, sample quotes) and calls Groq so product managers can explore hypotheses about repetitive listening and discovery friction with citations. Requires `GROQ_API_KEY` on the backend.
+`POST /api/pm-buddy/chat` builds a structured evidence context (dataset scale, repetitive-listening keywords, segment hints for on-demand use, latest synthesis, sample quotes) and calls Groq so product managers can explore **why discovery is hard and why repetitive listening persists**, with citations. Default answers are **direct answer + supporting evidence**; segment breakdown and testable hypotheses appear **only when the user explicitly asks**. Requires `GROQ_API_KEY` on the backend. Restart the backend after prompt changes.
 
 **Two ways to refresh the insights:**
 Insights can be regenerated either automatically or on demand:
@@ -445,7 +448,7 @@ A short reference for non-technical readers. Each term is explained in plain Eng
 - **NLP (Natural Language Processing)** - software that reads and understands human language.
 - **PII (Personally Identifiable Information)** - any information that could identify a specific person, such as a real name, email address, or phone number. Handled with extra care.
 - **Pipeline** - the full chain of steps from raw data to insight, working like an assembly line.
-- **PM Buddy** - a Groq-powered chat copilot on the dashboard that answers product-strategy questions using live dataset stats, repetitive-listening signals, and synthesis evidence.
+- **PM Buddy** - a Groq-powered chat copilot on the dashboard that answers product-strategy questions using live dataset stats, repetitive-listening signals, and synthesis evidence — focused on why meaningful discovery is hard and why listening falls back to familiar content; segment and hypothesis sections only when asked.
 - **Postgres** - the database (an organised store of tables) we run in Supabase to hold the raw, clean, and insights data.
 - **Supabase** - a cloud service that provides our managed Postgres database and related tooling.
 - **Rate limit** - a cap on how often a source allows us to ask for data. Going over the limit can get us blocked.

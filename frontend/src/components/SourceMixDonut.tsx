@@ -56,22 +56,26 @@ export function SourceMixDonut({
     totalOverride ?? entries.reduce((sum, [, count]) => sum + count, 0);
 
   return (
-    <div className="flex flex-col h-full">
-      <h3 className="text-[13px] text-text-muted mb-4 shrink-0">{title}</h3>
-      <div className="flex-1 flex items-center gap-6 min-h-0">
-        <div className="relative w-28 h-28 sm:w-32 sm:h-32 shrink-0">
-          <div
-            className="w-full h-full rounded-full"
-            style={{ background: buildConicGradient(entries, total) }}
-          />
-          <div className="absolute inset-0 m-auto w-[4.5rem] h-[4.5rem] sm:w-24 sm:h-24 bg-surface-low rounded-full flex flex-col items-center justify-center border border-border-subtle shadow-inner">
-            <span className="text-[11px] sm:text-[13px] text-text-muted">Total</span>
-            <span className="text-[16px] sm:text-[20px] font-semibold text-on-surface leading-none">
-              {total >= 1000 ? `${(total / 1000).toFixed(1)}k` : formatNumber(total)}
-            </span>
+    <div className="flex flex-col h-full min-h-0">
+      {title ? (
+        <h3 className="text-[13px] text-text-muted mb-3 shrink-0">{title}</h3>
+      ) : null}
+      <div className="flex-1 flex flex-col min-h-0">
+        <div className="flex-1 flex items-center justify-center min-h-[140px] py-1">
+          <div className="relative aspect-square h-full max-h-[220px] w-full max-w-[220px]">
+            <div
+              className="w-full h-full rounded-full"
+              style={{ background: buildConicGradient(entries, total) }}
+            />
+            <div className="absolute inset-[14%] bg-surface-low rounded-full flex flex-col items-center justify-center border border-border-subtle shadow-inner">
+              <span className="text-[11px] sm:text-[13px] text-text-muted">Total</span>
+              <span className="text-[18px] sm:text-[22px] font-semibold text-on-surface leading-none">
+                {total >= 1000 ? `${(total / 1000).toFixed(1)}k` : formatNumber(total)}
+              </span>
+            </div>
           </div>
         </div>
-        <div className="flex-1 min-w-0 space-y-2.5">
+        <div className="w-full shrink-0 space-y-2 pt-3 border-t border-border-subtle/60">
           {entries.map(([source, count], i) => {
             const pct = total ? Math.round((count / total) * 100) : 0;
             const active = activeSource === source;

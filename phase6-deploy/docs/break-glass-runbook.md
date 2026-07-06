@@ -93,6 +93,7 @@ Acknowledge Phase 5 alerts in `ops.alerts` (`acknowledged_at`) after handling.
 ## 8. After recovery
 
 - [ ] `/health/ready` returns 200
-- [ ] Home page loads with executive summary
+- [ ] Home page loads with executive summary (research-agenda focused after `PROMPT_VERSION=2026-07-v1`)
+- [ ] `/pm-buddy` responds without 503 when `GROQ_API_KEY` is set
 - [ ] `phase6_deploy.runner deploy-smoke` passes
 - [ ] Post-mortem: update thresholds in `phase5-operations/config/alert_thresholds.yaml` if needed

@@ -24,7 +24,7 @@ flowchart LR
 
 ## Artifacts
 
-1. **Live dashboard** — executive summary, six questions, trends, PM Buddy
+1. **Live dashboard** — research-agenda executive summary, six questions, trends, PM Buddy
 2. **Health report** — `phase5-operations/reports/latest_health_report.md`
 3. **Alert log** — `ops.alerts` for drift, failures, theme spikes
 4. **Action log** — `ops.review_actions` for accountability
@@ -43,7 +43,7 @@ If metrics are flat, either the fix did not reach users, the sample is too small
 
 - **Pin** model + prompt version in `config/model_pin.yaml`
 - **Review quarterly** or when Groq deprecates a model
-- When prompts change, bump `PROMPT_VERSION` and record in `ops.model_registry`
+- When prompts change, bump `PROMPT_VERSION` (currently **`2026-07-v1`**) and record in `ops.model_registry`
 - Re-run synthesis on a fixed model before comparing historical theme trends (edge case 5.3)
 
 ## Alert fatigue

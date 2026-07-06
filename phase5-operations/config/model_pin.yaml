@@ -2,5 +2,5 @@
 # Update prompt_version when phase3_insights/prompts.py changes materially.
 
 groq_model: llama-3.3-70b-versatile
-prompt_version: 2026-06-v1
-notes: Initial Phase 5 pin — SQL aggregate + 7 Groq calls per run
+prompt_version: 2026-07-v1
+notes: Research-agenda prompts (discovery struggle + repetitive listening); PM Buddy concise default answers

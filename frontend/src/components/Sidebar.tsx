@@ -34,21 +34,18 @@ export function Sidebar() {
   return (
     <aside className="hidden md:flex flex-col py-8 gap-y-4 bg-surface-container-lowest h-screen w-64 fixed left-0 top-0 border-r border-border-subtle z-40">
       <div className="px-6 mb-8 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-surface-high flex items-center justify-center border border-border-subtle overflow-hidden relative">
-          <div
-            className="absolute inset-0 bg-cover bg-center opacity-50 mix-blend-screen"
-            style={{
-              backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBqGeOLuHedoMJMXwRr6DMtneOcnGZRkkPHN3WC9Q50brhJyHeZjoLH7bGLiia4ji1t-ercC8boTZ0r3MaiPbHw8yI1WZvqeEQBoJa9D6D_TAuDuZKd2uqE38CYLDHBWcGpYzfIBl85H63d0jTZs-Aryrd0ZPUx8rK8qXwLJTfyERA40u88cIl_uVxc4tpLQKz1JgqAE3P31Jx9FrAgM6Bcb0bMau0eg8t_jXUZX5sYa-I3biYs8OMFtHqn2vWNHTH5qbDt2Ww4b4mJ')",
-            }}
-          ></div>
-          <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
-            graphic_eq
-          </span>
+        <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-border-subtle bg-black">
+          <img
+            src="/app-logo.webp"
+            alt="Spotify Review Analysis Engine"
+            width={40}
+            height={40}
+            className="w-full h-full object-cover"
+          />
         </div>
         <div>
           <h1 className="text-[20px] font-semibold text-primary leading-tight">
-            Discovery Engine
+            Spotify Review Analysis Engine
           </h1>
         </div>
       </div>

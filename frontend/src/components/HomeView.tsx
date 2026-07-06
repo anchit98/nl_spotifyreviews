@@ -1,14 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { ColdStartLoadingScreen } from "@/components/ColdStartLoadingScreen";
 import { ExportReportButton } from "@/components/ExportReportButton";
 import { SynthesizeButton } from "@/components/SynthesizeButton";
+import { SourceMixDonut } from "@/components/SourceMixDonut";
 import { useInsightsData } from "@/components/InsightsDataProvider";
 import { EmptyState, GlassCard, PageHeader } from "@/components/ui";
 import {
   QUESTION_IDS,
   RESEARCH_QUESTIONS,
-  SOURCE_LABELS,
   type QuestionAnswer,
 } from "@/lib/types";
 import {
@@ -62,16 +63,7 @@ export function HomeView() {
   const { bundle, bundleLoading, bundleError } = useInsightsData();
 
   if (bundleLoading && !bundle) {
-    return (
-      <div className="p-4 md:p-10 max-w-[1600px] mx-auto w-full space-y-4">
-        <div className="h-10 w-64 skeleton rounded-lg" />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-28 skeleton rounded-xl" />
-          ))}
-        </div>
-      </div>
-    );
+    return <ColdStartLoadingScreen variant="dashboard" />;
   }
 
   if (!bundle) {
@@ -98,7 +90,6 @@ export function HomeView() {
     dataset_stats?.rated_review_count;
   const questionsAnswered = countAnsweredQuestions(question_answers);
   const bySource = dataset_stats?.by_source ?? aggregateBySource(question_answers);
-  const totalSource = Object.values(bySource).reduce((a, b) => a + b, 0);
   const themeCount = question_answers.reduce((n, a) => n + getThemes(a).length, 0);
   const sortedAnswers = [...question_answers].sort(
     (a, b) =>
@@ -109,7 +100,7 @@ export function HomeView() {
     <div className="p-4 md:p-10 max-w-[1600px] mx-auto w-full">
       <PageHeader
         title="Music Discovery Insights"
-        subtitle="Evidence from public user reviews & feedback."
+        subtitle="Why discovery is hard and why listening still clusters on repeat playlists, familiar artists, and previously discovered tracks."
         meta={
           <>
             <span className="flex items-center gap-1">
@@ -215,51 +206,13 @@ export function HomeView() {
           </GlassCard>
         )}
 
-        <GlassCard className="md:col-span-6 p-6 flex flex-col hover-inner-glow transition-all">
-          <h3 className="text-[20px] font-semibold text-on-surface flex items-center gap-2 mb-6">
+        <GlassCard className="md:col-span-6 p-6 flex flex-col min-h-[320px] hover-inner-glow transition-all">
+          <h3 className="text-[20px] font-semibold text-on-surface flex items-center gap-2 mb-2 shrink-0">
             <span className="material-symbols-outlined text-primary text-[20px]">pie_chart</span>
             Source Mix
           </h3>
-          <div className="flex-1 flex items-center gap-8">
-            <div className="relative w-32 h-32 shrink-0">
-              <div
-                className="w-full h-full rounded-full"
-                style={{
-                  background: `conic-gradient(
-                    var(--color-primary-container) 0% 45%, 
-                    var(--color-secondary-container) 45% 75%, 
-                    var(--color-surface-high) 75% 90%, 
-                    var(--color-text-muted) 90% 100%
-                  )`,
-                }}
-              />
-              <div className="absolute inset-0 m-auto w-24 h-24 bg-surface-low rounded-full flex flex-col items-center justify-center border border-border-subtle shadow-inner">
-                <span className="text-[13px] text-text-muted">Total</span>
-                <span className="text-[20px] font-semibold text-on-surface leading-none">
-                  {totalReviews >= 1000 ? `${(totalReviews / 1000).toFixed(1)}k` : formatNumber(totalReviews)}
-                </span>
-              </div>
-            </div>
-            <div className="flex-1 space-y-3">
-              {Object.entries(bySource)
-                .sort(([, a], [, b]) => b - a)
-                .slice(0, 4)
-                .map(([source, count], i) => {
-                  const pct = totalSource ? Math.round((count / totalSource) * 100) : 0;
-                  const colors = ["bg-primary-container", "bg-secondary-container", "bg-surface-high border border-border-subtle", "bg-text-muted"];
-                  return (
-                    <div key={source} className="flex items-center justify-between group cursor-pointer">
-                      <div className="flex items-center gap-2">
-                        <div className={`w-3 h-3 rounded-sm ${colors[i]}`} />
-                        <span className="text-[15px] text-on-surface group-hover:text-primary-container transition-colors">
-                          {SOURCE_LABELS[source] ?? source}
-                        </span>
-                      </div>
-                      <span className="text-[13px] text-text-muted">{pct}% ({formatNumber(count)})</span>
-                    </div>
-                  );
-                })}
-            </div>
+          <div className="flex-1 min-h-0">
+            <SourceMixDonut bySource={bySource} total={totalReviews} title="" />
           </div>
         </GlassCard>
 

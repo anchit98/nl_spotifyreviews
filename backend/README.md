@@ -48,7 +48,13 @@ Trend **sentiment score** is derived from star ratings, not NLP text analysis:
 
 ## PM Buddy
 
-`POST /api/pm-buddy/chat` accepts `{ message, history? }` and builds context from dataset stats, repetitive-listening signals, segment breakdown, latest synthesis, and sample quotes before calling Groq. History is capped to the last 10 turns.
+`POST /api/pm-buddy/chat` accepts `{ message, history? }` and builds context from dataset stats, repetitive-listening signals, segment hints (available on demand), latest synthesis, and sample quotes before calling Groq. History is capped to the last 10 turns.
+
+**Research agenda:** All answers tie back to why users struggle with meaningful music discovery and why listening still clusters on repeat playlists, familiar artists, and previously discovered tracks.
+
+**Answer format (default):** Direct answer + supporting evidence (quotes and counts). Brief caveat only when data is thin. **Do not** expect segment breakdown or testable-hypothesis sections unless the user explicitly asks for segments, user segments, or hypotheses/experiments.
+
+Restart the backend after changing prompts in `pm_buddy.py`.
 
 ## Synthesize now pipeline
 

@@ -4,7 +4,7 @@
 
 Design a **highly interactive, modern web dashboard** (desktop-first, fully responsive) for **Spotify product teams, executives, and user researchers**.
 
-The product answers **six strategic research questions** about why users struggle with music discovery, using evidence from **~23,000 cleaned public reviews** collected from five sources:
+The product answers **six strategic research questions** about why users struggle with **meaningful music discovery** and why a significant share of listening still comes from **repeat playlists, familiar artists, and previously discovered tracks**, using evidence from **~23,000 cleaned public reviews** collected from five sources:
 
 - **App Store**
 - **Google Play**
@@ -85,7 +85,7 @@ Use a **hybrid design system**:
 4. Read **verbatim anonymised quotes** tied to each theme
 5. Trigger **“Synthesize now”** from the home header to refresh with the latest 7 days of feedback
 6. **Export Report** as a multi-page PDF for stakeholders
-7. Ask **PM Buddy** evidence-backed questions about repetitive listening and discovery strategy
+7. Ask **PM Buddy** evidence-backed questions about why discovery is hard and why repetitive listening persists
 8. Track **synthesis run history** and **live review trends** over time
 
 ---
@@ -102,12 +102,12 @@ Design **11 screens** (desktop + mobile for key screens) with **interaction note
 
 **Header (persistent)**
 
-- Product name: **Music Discovery Insights**
-- Subtitle: *Evidence from public user feedback*
+- Product name: **Spotify Review Analysis Engine** (sidebar) / **Music Discovery Insights** (home header)
+- Subtitle: *Why discovery is hard and why listening still clusters on repeat playlists, familiar artists, and previously discovered tracks.*
 - Right side: **Export Report** (secondary) + **Synthesize now** (primary filled button) + run status indicator dot (green/amber/red)
 - Metadata strip: `23,166 reviews` · `Last updated: 16 Jun 2026, 14:32 UTC` · `Run: Success`
 
-**Sidebar navigation:** Home · PM Buddy · Trends · History · Q1–Q6
+**Sidebar navigation:** Home · PM Buddy · Trends · History · Q1–Q6 — Spotify logo (`/app-logo.webp`) + title **Spotify Review Analysis Engine**
 
 **Bento grid cards:**
 
@@ -120,7 +120,8 @@ Design **11 screens** (desktop + mobile for key screens) with **interaction note
 
 **B. Executive summary card**
 
-- 3–5 sentence narrative (justified text, readable padding)
+- 3–5 sentence narrative centred on the primary research agenda (discovery struggle + repetitive listening fallback)
+- Opens with headline insight on why discovery fails or why familiar content dominates — not generic product complaints
 - **Copy narrative** icon button
 
 **C. Top pain points (interactive)**
@@ -136,9 +137,10 @@ Design **11 screens** (desktop + mobile for key screens) with **interaction note
 
 **E. Source mix donut (interactive)**
 
+- Shared `SourceMixDonut` component — **large donut centred above** a full-width legend (vertical stack, not side-by-side)
 - 5 segments: App Store, Google Play, Reddit, Community Forum, Social Media
-- Hover segment → highlight + count tooltip
-- Click segment → preview filtered quote snippet
+- Centre label shows total review count
+- Click legend row → highlight when interactive (question pages)
 
 **F. Six question preview cards (2×3 grid desktop, stack mobile)**
 
@@ -256,8 +258,10 @@ Each theme row:
 ### Screen 9: PM Buddy — `/pm-buddy`
 
 - Chat layout: message thread + input bar
-- System positions PM Buddy as a product-strategy copilot for repetitive listening and discovery friction
-- Answers cite dataset stats, segment hints, and verbatim quotes from the evidence context
+- Copilot focused on **why meaningful discovery is hard** and **why listening falls back to repeat playlists, familiar artists, and previously discovered tracks**
+- Default answers: direct answer + supporting evidence (quotes and counts). **No** segment breakdown or testable-hypothesis sections unless the user explicitly asks
+- Starter prompts framed as “why” questions; segment prompt available for on-demand segment analysis
+- Answers cite dataset stats and verbatim quotes from the evidence context
 - Empty state when `GROQ_API_KEY` is not configured (503 from backend)
 - Sidebar link between Home and Trends
 
@@ -319,6 +323,7 @@ Design all of these (with shimmer skeletons, not spinners alone):
 - **Question with zero mentions** — “Not enough data for this question”
 - **Low confidence** — amber badge when source sample is thin (e.g. Reddit n=4)
 - **Loading skeleton** — home bento grid, theme bars, quote cards
+- **Cold start loading** — Home and Trends show synthesis-style progress screen while Render backend wakes (30–60s on Starter tier)
 - **Partial run** — 6/7 questions complete, executive summary missing
 
 ---
@@ -338,7 +343,7 @@ Design all of these (with shimmer skeletons, not spinners alone):
 11. **Synthesis CTA** — button → progress ring morph
 12. **Progress stepper** — Collect → Clean → Synthesize
 13. **Interactive bar chart** — hover, click-to-filter
-14. **Donut chart** — source mix
+14. **Donut chart** — source mix (`SourceMixDonut`: large pie above legend)
 15. **Data table** — run history with expandable rows
 16. **Snackbar / toast** — synthesis complete
 17. **Export menu** — Copy narrative, Copy themes, Download summary
@@ -351,18 +356,20 @@ Design all of these (with shimmer skeletons, not spinners alone):
 
 ### Executive summary
 
+Executive summaries must open with why discovery is hard and/or why repetitive listening persists. Example shape:
+
 ```json
 {
-  "summary_text": "Users generally find discovery workable, but recommendation quality, ad frequency on the free tier, and playback control gaps drive the loudest complaints. Premium value and shuffle limitations split the audience sharply.",
+  "summary_text": "A significant share of reviews describe falling back to repeat playlists and familiar artists because recommendations feel repetitive and discovery surfaces are hard to trust. Users who mention struggling to find new music often cite the same recommendation loops and shuffle behaviour that keep previously discovered tracks in rotation.\n\nThe loudest frustrations cluster around recommendation quality and playback control — both of which push listeners toward content they already know rather than meaningful new discovery.",
   "top_pain_points": [
-    "Poor recommendation quality and repetitive suggestions",
-    "Intrusive ads on the free tier",
-    "Limited playback control (skip, shuffle, repeat)"
+    "Recommendations recycle the same artists and genres, so users stop trusting discovery and return to repeat playlists",
+    "Shuffle and repeat behaviour on large playlists reinforces listening to previously discovered tracks",
+    "Free-tier ad interruptions break discovery sessions and send users back to familiar content"
   ],
   "top_opportunities": [
-    "Improve Discover Weekly visibility and personalization",
-    "Clarify Premium value vs free limitations",
-    "Fix shuffle and repeat behaviour on large playlists"
+    "Break recommendation loops with fresher Discover Weekly and Release Radar personalization",
+    "Surface discovery paths that reward exploration instead of defaulting to liked songs",
+    "Reduce friction between finding a new track and adding it to a durable discovery playlist"
   ]
 }
 ```

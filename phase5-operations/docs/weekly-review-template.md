@@ -23,7 +23,7 @@ Use this agenda for the Phase 5 feedback loop meeting ([architecture.md](../../d
 
 - Trends chart: sentiment or rating shifts since last month
 - **Rising themes** from health report (sustained spikes, not one-off blips)
-- Top pain points / opportunities from executive summary
+- Top pain points / opportunities from executive summary — prioritise items that explain **discovery struggle** or **repetitive listening fallback**
 
 ## 3. Research questions — deltas (10 min)
 
@@ -31,11 +31,11 @@ Walk the six questions; note only **what changed** vs last review:
 
 | Question | Top theme delta | Decision needed? |
 |----------|-----------------|------------------|
-| Q1 Repetitive listening | | |
+| Q1 Discovery barriers | | |
 | Q2 Recommendation frustrations | | |
 | Q3 Listening goals | | |
-| Q4 Discovery barriers | | |
-| Q5 Feature gaps | | |
+| Q4 Repetitive listening | | |
+| Q5 Segment differences | | |
 | Q6 Unmet needs | | |
 
 ## 4. Actions (10 min)

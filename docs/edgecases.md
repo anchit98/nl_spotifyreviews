@@ -246,6 +246,14 @@ A quick reminder of the chosen tools (all explained in the architecture glossary
 - **Detect:** PM Buddy requests fail with 503; health check still passes.
 - **Recover:** Add the key and restart the backend (ensure no stale worker on port 8000).
 
+### 4.7a PM Buddy answers include unwanted segment or hypothesis sections
+
+- **What happens:** After prompt changes, PM Buddy still surfaces segment breakdowns or testable hypotheses on every reply.
+- **Why it matters:** Answers feel verbose and bury the core discovery/repetition insight.
+- **Prevent:** System prompt in `backend_api/pm_buddy.py` instructs the model to include those sections **only when explicitly requested**; restart backend after deploy.
+- **Detect:** Manual chat smoke test on `/pm-buddy` with a general question (not about segments).
+- **Recover:** Redeploy backend with current `pm_buddy.py`; kill orphaned uvicorn workers if old prompt is cached in a stale process.
+
 ### 4.8 An orphaned backend worker serves old routes
 
 - **What happens:** After code changes, an old uvicorn multiprocessing child keeps listening on port 8000 while the parent process is gone.

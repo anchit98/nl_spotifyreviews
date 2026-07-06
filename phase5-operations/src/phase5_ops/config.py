@@ -41,6 +41,6 @@ class Settings:
             supabase_anon_key=anon,
             alert_webhook_url=webhook,
             groq_model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
-            prompt_version=os.getenv("PROMPT_VERSION", "2026-06-v1"),
+            prompt_version=os.getenv("PROMPT_VERSION", "2026-07-v1"),
             phase5_root=PHASE5_ROOT,
         )

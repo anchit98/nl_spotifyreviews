@@ -45,7 +45,7 @@ jobs:
           SUPABASE_PROJECT_ANON_KEY: ${{ secrets.SUPABASE_PROJECT_ANON_KEY }}
           ALERT_WEBHOOK_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
           GROQ_MODEL: llama-3.3-70b-versatile
-          PROMPT_VERSION: 2026-06-v1
+          PROMPT_VERSION: 2026-07-v1
           PYTHONPATH: ${{ github.workspace }}/phase5-operations/src
         run: |
           TRIGGER="${{ github.event.inputs.trigger || 'post_pipeline' }}"
