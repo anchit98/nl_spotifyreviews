@@ -85,7 +85,8 @@ jobs:
   groq-smoke:
     name: Groq smoke test
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Optional: skipped when GROQ_API_KEY is not in repository secrets (CI still passes).
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.GROQ_API_KEY != ''
     steps:
       - uses: actions/checkout@v4
 

@@ -65,6 +65,8 @@ In GitHub: **Settings → Secrets and variables → Actions → New repository s
 | `STAGING_API_URL` | Optional — Phase 6 post-deploy smoke (staging Render URL) |
 | `PRODUCTION_API_URL` | Optional — Phase 6 post-deploy smoke (production Render URL) |
 
+The **CI Groq smoke test** (`.github/workflows/ci.yml`) runs on pushes to `main` only when `GROQ_API_KEY` is set. If the secret is missing, that job is skipped and the rest of CI still passes.
+
 **Test the pipeline:** **Actions → Data Pipeline (Phases 1-3) → Run workflow** → mode `probe` (cheap) or `weekly`.
 
 **Phase 5:** After applying [`phase5-operations/sql/`](../phase5-operations/sql/) in Supabase, the **Phase 5 Monitor** workflow runs automatically after a successful pipeline (see [`phase5-operations/README.md`](../phase5-operations/README.md)).
