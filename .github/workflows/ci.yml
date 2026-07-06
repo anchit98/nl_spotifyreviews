@@ -85,8 +85,9 @@ jobs:
   groq-smoke:
     name: Groq smoke test
     runs-on: ubuntu-latest
-    # Optional: skipped when GROQ_API_KEY is not in repository secrets (CI still passes).
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.GROQ_API_KEY != ''
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -100,8 +101,12 @@ jobs:
         run: pip install -r phase6-deploy/requirements.txt
 
       - name: Groq API smoke test
+        if: env.GROQ_API_KEY != ''
         env:
           PYTHONPATH: ${{ github.workspace }}/phase6-deploy/src
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           GROQ_MODEL: llama-3.3-70b-versatile
         run: python -m phase6_deploy.runner groq-smoke
+
+      - name: Skip Groq smoke (no secret)
+        if: env.GROQ_API_KEY == ''
+        run: echo "::notice::Skipping Groq smoke test — add GROQ_API_KEY repository secret to enable."

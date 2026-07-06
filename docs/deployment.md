@@ -65,7 +65,7 @@ In GitHub: **Settings → Secrets and variables → Actions → New repository s
 | `STAGING_API_URL` | Optional — Phase 6 post-deploy smoke (staging Render URL) |
 | `PRODUCTION_API_URL` | Optional — Phase 6 post-deploy smoke (production Render URL) |
 
-The **CI Groq smoke test** (`.github/workflows/ci.yml`) runs on pushes to `main` only when `GROQ_API_KEY` is set. If the secret is missing, that job is skipped and the rest of CI still passes.
+The **CI Groq smoke test** (`.github/workflows/ci.yml`) runs on pushes to `main`. If `GROQ_API_KEY` is not set in repository secrets, that step is skipped (the job still runs and passes).
 
 **Test the pipeline:** **Actions → Data Pipeline (Phases 1-3) → Run workflow** → mode `probe` (cheap) or `weekly`.
 
